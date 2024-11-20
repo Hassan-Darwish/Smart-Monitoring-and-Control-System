@@ -1,4 +1,4 @@
-# Embedded System: Smart Monitoring and Control System
+# Smart Monitoring and Control System
 
 ## Project Overview
 
