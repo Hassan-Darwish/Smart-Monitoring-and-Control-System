@@ -1,131 +1,141 @@
 # Smart Monitoring and Control System
 
-## Project Overview
-
-This project is a fully integrated embedded system designed to monitor environmental parameters such as temperature, light intensity, and flame presence. It provides real-time feedback and control mechanisms, utilizing various sensors and actuators to ensure efficient monitoring and response. The system is ideal for safety-critical environments, automating responses to environmental changes.
+The Smart Monitoring and Control System is an embedded system designed for real-time environmental monitoring. It utilizes multiple sensors to measure temperature, light intensity, and flame presence, providing automated control of actuators such as a fan, LEDs, and a buzzer. This system is ideal for safety-critical environments, offering efficient monitoring and response.
 
 ---
 
 ## Features
 
-- **Temperature Monitoring and Fan Control**:
-  - Utilizes an LM35 temperature sensor.
-  - Dynamically adjusts fan speed based on temperature thresholds.
-- **Light Intensity Monitoring**:
-  - Uses an LDR sensor to measure light intensity.
-  - Changes LED states based on predefined intensity thresholds.
-- **Flame Detection and Alert**:
-  - Incorporates a flame sensor to detect fire hazards.
-  - Activates a buzzer and displays a critical alert on the LCD when flames are detected.
-- **Real-Time Display**:
-  - A 16x2 LCD screen shows sensor readings and system status.
-- **Automated Actuation**:
-  - Includes a DC motor, RGB LEDs, and a buzzer for visual and audible feedback.
+1. **Multi-Sensor Monitoring**:
+   - Temperature, light intensity, and flame detection.
+   - Real-time display on a 16x2 LCD.
+
+2. **Actuator Control**:
+   - **Fan**: Automatically adjusts speed based on temperature.
+   - **LEDs**: Change states depending on light intensity levels.
+   - **Buzzer**: Alerts users to critical flame detection.
+
+3. **Dynamic Alerts**:
+   - Flame detection triggers a buzzer and an LCD alert.
+   - Fan operation status is displayed on the LCD.
+
+4. **Customizable Thresholds**:
+   - Temperature and light intensity thresholds can be adjusted in the code.
 
 ---
 
-## System Components
+## Components Required
 
-### Hardware Components
-1. **Sensors**:
-   - **LM35**: Temperature measurement.
-   - **LDR**: Light intensity detection.
-   - **Flame Sensor**: Fire detection.
-2. **Actuators**:
-   - **DC Motor**: Used as a fan for cooling.
-   - **RGB LEDs**: Visual indication of light intensity.
-   - **Buzzer**: Audible alerts for critical events.
-3. **Output Device**:
-   - **16x2 LCD Display**: For displaying environmental data and alerts.
+1. **Microcontroller**:
+   - ATmega32.
 
-### Software Modules
-- **`gpio.h`**: Manages general-purpose input/output.
-- **`pwm.h`**: Provides pulse-width modulation for controlling motor speed.
-- **`adc.h`**: Reads analog signals from sensors.
-- **`lcd.h`**: Controls the LCD for data display.
-- **`dc_motor.h`**: Controls the fan motor speed and direction.
-- **`led.h`**: Manages the RGB LED states.
-- **`ldr_sensor.h`**: Reads and processes data from the LDR sensor.
-- **`flame_sensor.h`**: Monitors and handles flame sensor data.
-- **`lm35_sensor.h`**: Processes temperature data from the LM35 sensor.
-- **`buzzer.h`**: Handles buzzer activation for alerts.
-- **`bit_manipulation.h`**: Provides macros for efficient bitwise operations.
-- **`stdtypes.h`**: Defines standard types (`uint8`, `uint16`, etc.) for consistency.
+2. **Sensors**:
+   - LM35 (Temperature).
+   - LDR (Light Intensity).
+   - Flame Sensor.
+
+3. **Actuators**:
+   - DC Motor (Fan).
+   - RGB LEDs.
+   - Buzzer.
+
+4. **Display**:
+   - 16x2 LCD.
+
+5. **Other**:
+   - Necessary drivers (`gpio.h`, `adc.h`, `pwm.h`).
 
 ---
 
-## Functional Flow
+## How It Works
 
 1. **Initialization**:
-   - Initialize all modules, including ADC, LCD, LEDs, sensors, and actuators.
-2. **Monitoring Loop**:
-   - Continuously monitor sensor values.
-   - Display real-time data on the LCD.
-   - Respond to sensor inputs by controlling actuators.
-3. **System Behavior**:
-   - Adjust fan speed based on temperature thresholds.
-   - Change LED states based on light intensity levels.
-   - Trigger alerts for flame detection until the hazard is cleared.
+   - All modules (ADC, PWM, LCD, etc.) are initialized.
+
+2. **Monitoring and Control**:
+   - Sensors continuously send data to the microcontroller.
+   - Actuators respond dynamically based on sensor inputs:
+     - Fan speed adjusts with temperature.
+     - LEDs change based on light intensity.
+     - Buzzer activates for flame detection.
+
+3. **Real-Time Feedback**:
+   - Sensor readings and system status are displayed on the LCD.
 
 ---
 
-## Thresholds and Behavior
+## Code Overview
 
-- **Temperature**:
-  - `25°C`: Fan OFF
-  - `25°C - 30°C`: Fan at quarter speed
-  - `30°C - 35°C`: Fan at half speed
-  - `35°C - 40°C`: Fan at three-quarters speed
-  - `>40°C`: Fan at full speed
-- **Light Intensity**:
-  - `<15`: All LEDs ON
-  - `15 - 50`: Red and Green LEDs ON
-  - `50 - 70`: Only Red LED ON
-  - `>70`: All LEDs OFF
-- **Flame Detection**:
-  - Buzzer ON and critical alert displayed until flame is no longer detected.
+The code is written in C and uses AVR libraries for hardware interfacing:
 
----
+- **Sensor Input**:
+  - ADC reads analog signals from LM35 and LDR sensors.
+  - Flame sensor provides digital input.
 
-## How to Use
+- **Actuator Control**:
+  - PWM controls the DC motor speed.
+  - GPIO controls LEDs and the buzzer.
 
-### Hardware Setup
-- Connect the sensors, actuators, and LCD to the microcontroller following the pinout in the source code.
-- Ensure proper power supply and wiring for all components.
+- **LCD Display**:
+  - Displays real-time sensor readings and system alerts.
 
-### Software Setup
-1. Include all header files (`modules.h`, `gpio.h`, etc.) in your project.
-2. Compile the source code using an AVR-compatible compiler.
-3. Upload the compiled program to the microcontroller.
-
-### Operation
-1. Power on the system.
-2. Observe real-time sensor data and system status on the LCD.
-3. Test system responses by varying temperature, light intensity, or introducing a flame.
+- **Custom Functions**:
+  - `ADC_init`, `LCD_init`, `FLAME_SENSOR_getValue`, etc., manage hardware-specific tasks.
+  - Threshold values are defined in `main.h`.
 
 ---
 
-## Proteus Simulation
+## Pin Configuration
 
-Below is the Proteus simulation design for the system, showcasing the connections between sensors, actuators, and the microcontroller:
+| Port | Pin   | Description                          |
+|------|-------|--------------------------------------|
+| PORTA | PA0   | ADC Channel 0 for LM35 Sensor        |
+| PORTA | PA1   | ADC Channel 1 for LDR Sensor         |
+| PORTB | PB0   | LED Red                              |
+| PORTB | PB1   | LED Green                            |
+| PORTB | PB2   | LED Blue                             |
+| PORTC | PC0-PC7 | Data lines for LCD                 |
+| PORTD | PD0   | Flame Sensor Input                   |
+| PORTD | PD4   | Buzzer Output                        |
+| PORTD | PD5   | Fan Motor Control                    |
+
+---
+
+## How to Run
+
+1. **Setup Hardware**:
+   - Assemble the circuit as per the pin configuration.
+   - Ensure proper connections for sensors, actuators, and the LCD.
+
+2. **Load Code**:
+   - Use an AVR programmer to upload the code to the ATmega32 microcontroller.
+
+3. **Power On**:
+   - The system will start monitoring and controlling components based on sensor inputs.
+
+---
+
+## Circuit Diagram
+
+Below is the Proteus simulation for the Smart Monitoring and Control System:
 
 <img width="1916" alt="Screenshot 2024-11-20 at 11 41 41 PM" src="https://github.com/user-attachments/assets/fa9e4ee2-91d5-47fa-b136-82284e3caa09">
 
----
-## File Descriptions
+To explore or edit the circuit, open the included Proteus project file (`project3.pdsprj`) using Proteus Design Suite.
 
-- **`main.c`**: The main source file containing the system logic and monitoring loop.
-- **`main.h`**: Defines constants, thresholds, and LCD positions.
-- **`modules.h`**: Includes all necessary headers for the project's modules.
-- **Module Drivers**:
-  - `gpio.h`, `pwm.h`, `adc.h`, etc., provide individual functionalities for hardware components.
+---
+
+## Future Enhancements
+
+- Add a Wi-Fi module for remote monitoring.
+- Replace the LCD with a more advanced OLED display.
+- Integrate machine learning for predictive hazard detection.
 
 ---
 
 ## License
 
 This project is open-source under the MIT License. Feel free to modify and share.
-
 
 ---
 
