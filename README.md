@@ -122,8 +122,13 @@ Below is the Proteus simulation design for the system, showcasing the connection
 
 ---
 
+## License
+
+This project is open-source under the MIT License. Feel free to modify and share.
+
+
+---
+
 ## Author
 
-- **Hassan Darwish**
-
-This project demonstrates a robust example of embedded system design for monitoring and control applications. Contributions and modifications are welcome!
+Developed by **Hassan Darwish**.
